@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no,
+               viewport-fit=cover">
+
+<title>小希 · 深处的祝愿</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family:
+        "Microsoft YaHei",
+        "PingFang SC",
+        Arial,
+        sans-serif;
+}
+
+body {
+    touch-action: manipulation;
+}
+
+/* =========================
+   主舞台
+========================= */
+
+#game {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+
+/* =========================
+   第一幕：黑色深处
+========================= */
+
+#scene1 {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            circle at center,
+            #151515 0%,
+            #050505 45%,
+            #000 80%
+        );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    transition:
+        opacity 1.5s ease,
+        transform 1.5s ease;
+}
+
+#scene1.hide {
+    opacity: 0;
+    transform: scale(1.15);
+    pointer-events: none;
+}
+
+.introText {
+    position: relative;
+    text-align: center;
+    color: white;
+
+    font-size: clamp(22px, 6vw, 34px);
+    letter-spacing: 5px;
+    line-height: 1.8;
+
+    animation:
+        textGlow 2s ease-in-out infinite alternate,
+        textFloat 3s ease-in-out infinite;
+}
+
+.introText::after {
+    content: "";
+    position: absolute;
+    inset: -30px;
+    background: radial-gradient(
+        ellipse,
+        rgba(255,255,255,.15),
+        transparent 65%
+    );
+    filter: blur(15px);
+    z-index: -1;
+}
+
+.subText {
+    display: block;
+    margin-top: 18px;
+    font-size: 12px;
+    letter-spacing: 4px;
+    opacity: .45;
+    animation: blink 2s infinite;
+}
+
+@keyframes textGlow {
+    from {
+        text-shadow:
+            0 0 5px #fff,
+            0 0 10px #fff,
+            0 0 20px rgba(255,255,255,.5);
+    }
+
+    to {
+        text-shadow:
+            0 0 10px #fff,
+            0 0 25px #fff,
+            0 0 45px rgba(255,255,255,.8);
+    }
+}
+
+@keyframes textFloat {
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes blink {
+    0%,100% {
+        opacity: .25;
+    }
+
+    50% {
+        opacity: .8;
+    }
+}
+
+/* =========================
+   第二幕：奔跑
+========================= */
+
+#scene2 {
+    position: absolute;
+    inset: 0;
+
+    opacity: 0;
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #070b1c 0%,
+            #101938 55%,
+            #070912 100%
+        );
+
+    transition: opacity 1s ease;
+}
+
+#scene2.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 月亮 */
+
+.moon {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+
+    top: 11%;
+    right: 13%;
+
+    background: #fff8d6;
+
+    box-shadow:
+        0 0 15px #fff,
+        0 0 35px rgba(255,240,160,.6),
+        0 0 80px rgba(255,240,160,.25);
+}
+
+/* 星星 */
+
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: white;
+
+    animation:
+        starBlink 2s infinite alternate;
+}
+
+@keyframes starBlink {
+    from {
+        opacity: .2;
+        transform: scale(.6);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.5);
+    }
+}
+
+/* 地面 */
+
+.ground {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 27%;
+
+    background:
+        linear-gradient(
+            to top,
+            #020203,
+            #090b13
+        );
+
+    border-top: 1px solid rgba(255,255,255,.05);
+}
+
+/* =========================
+   火柴人
+========================= */
+
+.stickman {
+    position: absolute;
+
+    width: 50px;
+    height: 100px;
+
+    left: -80px;
+    bottom: 24%;
+
+    transform-origin: bottom center;
+
+    opacity: 0;
+}
+
+.stickman.run {
+    animation:
+        runAcross 4.5s linear forwards;
+}
+
+.stickman.s2 {
+    animation-delay: .5s;
+}
+
+.stickman.s3 {
+    animation-delay: 1s;
+}
+
+.stickman.s4 {
+    animation-delay: 1.5s;
+}
+
+/* 头 */
+
+.head {
+    position: absolute;
+
+    width: 24px;
+    height: 24px;
+
+    left: 13px;
+    top: 0;
+
+    border-radius: 50%;
+
+    border: 3px solid white;
+
+    box-shadow:
+        0 0 8px rgba(255,255,255,.7);
+}
+
+/* 身体 */
+
+.body {
+    position: absolute;
+
+    width: 3px;
+    height: 43px;
+
+    left: 24px;
+    top: 23px;
+
+    background: white;
+
+    box-shadow:
+        0 0 5px rgba(255,255,255,.6);
+}
+
+/* 手 */
+
+.arm {
+    position: absolute;
+
+    width: 35px;
+    height: 3px;
+
+    top: 35px;
+    left: 8px;
+
+    background: white;
+
+    transform-origin: left center;
+}
+
+.arm.left {
+    transform: rotate(30deg);
+}
+
+.arm.right {
+    transform:
+        rotate(-35deg)
+        translateY(1px);
+}
+
+/* 腿 */
+
+.leg {
+    position: absolute;
+
+    width: 36px;
+    height: 3px;
+
+    top: 62px;
+    left: 24px;
+
+    background: white;
+
+    transform-origin: left center;
+}
+
+.leg.left {
+    transform: rotate(55deg);
+}
+
+.leg.right {
+    transform: rotate(-55deg);
+}
+
+/* 火焰 */
+
+.fire {
+    position: absolute;
+
+    width: 18px;
+    height: 25px;
+
+    top: -20px;
+    left: 16px;
+
+    background:
+        radial-gradient(
+            ellipse at center bottom,
+            #fff 0%,
+            #ffe66d 20%,
+            #ff8c00 50%,
+            #ff2a00 75%,
+            transparent 76%
+        );
+
+    border-radius:
+        50% 50% 45% 45%;
+
+    filter:
+        drop-shadow(0 0 7px #ff9d00)
+        drop-shadow(0 0 14px #ff4d00);
+
+    transform-origin: bottom;
+
+    animation:
+        fireMove .18s infinite alternate;
+}
+
+@keyframes fireMove {
+    from {
+        transform:
+            scale(1)
+            rotate(-4deg);
+    }
+
+    to {
+        transform:
+            scale(1.15, .85)
+            rotate(5deg);
+    }
+}
+
+@keyframes runAcross {
+
+    0% {
+        left: -80px;
+        bottom: 24%;
+        opacity: 0;
+        transform: scale(.55);
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    65% {
+        left: 48%;
+        bottom: 25%;
+        transform: scale(.8);
+    }
+
+    80% {
+        left: 60%;
+        bottom: 39%;
+        transform:
+            scale(.9)
+            rotate(-5deg);
+    }
+
+    100% {
+        left: 65%;
+        bottom: 27%;
+        transform: scale(.85);
+        opacity: 1;
+    }
+}
+
+/* =========================
+   蛋糕
+========================= */
+
+.cake {
+    position: absolute;
+
+    left: 50%;
+    bottom: 19%;
+
+    width: 150px;
+    height: 110px;
+
+    transform:
+        translateX(-50%)
+        scale(.8);
+
+    opacity: 0;
+
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.cake.show {
+    opacity: 1;
+    transform:
+        translateX(-50%)
+        scale(1);
+}
+
+/* 蛋糕盘 */
+
+.plate {
+    position: absolute;
+
+    bottom: 0;
+    left: -15px;
+
+    width: 180px;
+    height: 15px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #e8e8e8,
+            #777
+        );
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.5);
+}
+
+/* 蛋糕 */
+
+.cakeBody {
+    position: absolute;
+
+    bottom: 12px;
+    left: 10px;
+
+    width: 130px;
+    height: 70px;
+
+    border-radius:
+        12px 12px 18px 18px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #ff9ab8,
+            #ed4777
+        );
+
+    box-shadow:
+        inset 0 -10px 0 rgba(0,0,0,.1),
+        0 5px 15px rgba(255,80,130,.25);
+}
+
+/* 奶油 */
+
+.cream {
+    position: absolute;
+
+    top: -14px;
+    left: 0;
+
+    width: 130px;
+    height: 30px;
+
+    background: #fff;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 3px 5px rgba(0,0,0,.15);
+}
+
+.cream::before,
+.cream::after {
+    content: "";
+
+    position: absolute;
+
+    width: 25px;
+    height: 30px;
+
+    background: #fff;
+
+    border-radius: 50%;
+}
+
+.cream::before {
+    left: 30px;
+    top: 8px;
+}
+
+.cream::after {
+    right: 25px;
+    top: 5px;
+}
+
+/* 蜡烛 */
+
+.candle {
+    position: absolute;
+
+    width: 9px;
+    height: 35px;
+
+    background:
+        repeating-linear-gradient(
+            -45deg,
+            #fff,
+            #fff 5px,
+            #ff8aa9 5px,
+            #ff8aa9 10px
+        );
+
+    border-radius: 2px;
+
+    top: -43px;
+}
+
+.candle.c1 {
+    left: 42px;
+}
+
+.candle.c2 {
+    left: 61px;
+}
+
+.candle.c3 {
+    left: 80px;
+}
+
+.candle.c4 {
+    left: 99px;
+}
+
+/* 火焰 */
+
+.candleFire {
+    position: absolute;
+
+    width: 13px;
+    height: 20px;
+
+    left: -2px;
+    top: -18px;
+
+    border-radius:
+        50% 50% 45% 45%;
+
+    background:
+        radial-gradient(
+            ellipse at center bottom,
+            white 0%,
+            #ffe66d 25%,
+            #ff7b00 60%,
+            #ff2400 80%,
+            transparent 81%
+        );
+
+    filter:
+        drop-shadow(0 0 7px #ffb300);
+
+    animation:
+        candleFire .18s infinite alternate;
+}
+
+@keyframes candleFire {
+    from {
+        transform:
+            scale(1)
+            rotate(-3deg);
+    }
+
+    to {
+        transform:
+            scale(1.15,.9)
+            rotate(4deg);
+    }
+}
+
+.candleFire.off {
+    animation: fireOff .5s forwards;
+}
+
+@keyframes fireOff {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    60% {
+        opacity: .5;
+        transform:
+            translateY(-8px)
+            scale(.6);
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translateY(-25px)
+            scale(.1);
+    }
+}
+
+/* =========================
+   第三幕
+========================= */
+
+#scene3 {
+    position: absolute;
+    inset: 0;
+
+    opacity: 0;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 50% 70%,
+            #47314b,
+            #170f24 55%,
+            #06050a 100%
+        );
+
+    transition:
+        opacity 1.5s ease;
+}
+
+#scene3.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 小女孩 */
+
+.girl {
+    position: absolute;
+
+    left: 50%;
+    bottom: 17%;
+
+    width: 130px;
+    height: 280px;
+
+    transform:
+        translateX(-50%)
+        translateY(30px);
+
+    opacity: 0;
+
+    transition:
+        opacity 1.2s ease,
+        transform 1.2s ease;
+}
+
+.girl.show {
+    opacity: 1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+/* 女孩头发 */
+
+.hair {
+    position: absolute;
+
+    width: 92px;
+    height: 110px;
+
+    left: 19px;
+    top: 0;
+
+    border-radius:
+        48% 48% 45% 45%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #21130d,
+            #4b2618,
+            #21130d
+        );
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.4);
+}
+
+/* 脸 */
+
+.face {
+    position: absolute;
+
+    width: 65px;
+    height: 75px;
+
+    left: 32px;
+    top: 18px;
+
+    border-radius:
+        48% 48% 45% 45%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffe4cc,
+            #f6c4a8
+        );
+
+    z-index: 2;
+}
+
+/* 眼睛 */
+
+.eye {
+    position: absolute;
+
+    width: 7px;
+    height: 10px;
+
+    top: 47px;
+
+    background: #342019;
+
+    border-radius: 50%;
+}
+
+.eye.left {
+    left: 46px;
+}
+
+.eye.right {
+    right: 46px;
+}
+
+/* 嘴 */
+
+.mouth {
+    position: absolute;
+
+    width: 14px;
+    height: 7px;
+
+    left: 57px;
+    top: 68px;
+
+    border-bottom:
+        2px solid #a94b56;
+
+    border-radius: 50%;
+}
+
+/* 身体 */
+
+.girlBody {
+    position: absolute;
+
+    width: 100px;
+    height: 130px;
+
+    left: 15px;
+    top: 94px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #9e78e8,
+            #6942b7
+        );
+
+    border-radius:
+        45px 45px 25px 25px;
+}
+
+/* 手臂 */
+
+.girlArm {
+    position: absolute;
+
+    width: 20px;
+    height: 95px;
+
+    top: 105px;
+
+    background: #f7c5aa;
+
+    border-radius: 15px;
+
+    z-index: 4;
+
+    transform-origin: top center;
+}
+
+.girlArm.left {
+    left: 5px;
+    transform: rotate(15deg);
+}
+
+.girlArm.right {
+    right: 5px;
+    transform: rotate(-15deg);
+}
+
+/* =========================
+   许愿文字
+========================= */
+
+.wish {
+    position: absolute;
+
+    top: 11%;
+    left: 50%;
+
+    width: 90%;
+
+    transform:
+        translateX(-50%)
+        translateY(15px);
+
+    text-align: center;
+
+    color: #fff;
+
+    opacity: 0;
+
+    transition:
+        opacity 1.5s ease,
+        transform 1.5s ease;
+}
+
+.wish.show {
+    opacity: 1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+.wishTitle {
+    font-size: 15px;
+    letter-spacing: 5px;
+
+    color: #ffd9ec;
+
+    margin-bottom: 20px;
+
+    text-shadow:
+        0 0 10px rgba(255,180,220,.7);
+}
+
+.wishText {
+    font-size: clamp(15px, 4.2vw, 20px);
+
+    line-height: 2;
+
+    letter-spacing: 1px;
+
+    text-shadow:
+        0 0 10px rgba(255,255,255,.4);
+
+    white-space: pre-line;
+}
+
+/* =========================
+   吹灭提示
+========================= */
+
+.blowHint {
+    position: absolute;
+
+    bottom: 5%;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    color: rgba(255,255,255,.7);
+
+    font-size: 12px;
+
+    letter-spacing: 3px;
+
+    opacity: 0;
+
+    transition: opacity 1s;
+}
+
+.blowHint.show {
+    opacity: 1;
+}
+
+/* =========================
+   最终祝福
+========================= */
+
+#ending {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #24112f,
+            #07030b 75%
+        );
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 2s ease;
+}
+
+#ending.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.endTitle {
+    font-size: clamp(28px, 8vw, 44px);
+
+    color: #fff;
+
+    letter-spacing: 7px;
+
+    margin-bottom: 25px;
+
+    text-shadow:
+        0 0 10px #fff,
+        0 0 30px #ff9bd0,
+        0 0 60px #ff5db0;
+
+    animation:
+        finalGlow 2s infinite alternate;
+}
+
+.endText {
+    width: 85%;
+
+    color: #f9dff0;
+
+    font-size: 15px;
+
+    line-height: 2;
+
+    letter-spacing: 2px;
+}
+
+.signature {
+    margin-top: 35px;
+
+    color: rgba(255,255,255,.55);
+
+    font-size: 12px;
+
+    letter-spacing: 4px;
+}
+
+@keyframes finalGlow {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.05);
+    }
+}
+
+/* =========================
+   星光粒子
+========================= */
+
+.particle {
+    position: absolute;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+        0 0 8px white,
+        0 0 16px #ffd5ee;
+
+    pointer-events: none;
+
+    animation:
+        particleMove 2.5s ease-out forwards;
+}
+
+@keyframes particleMove {
+
+    0% {
+        opacity: 1;
+
+        transform:
+            translate(0,0)
+            scale(1);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate(
+                var(--x),
+                var(--y)
+            )
+            scale(.1);
+    }
+}
+
+/* =========================
+   爱心
+========================= */
+
+.heart {
+    position: absolute;
+
+    font-size: 18px;
+
+    color: #ff9ac8;
+
+    text-shadow:
+        0 0 10px #ff4e9a;
+
+    animation:
+        heartFloat 3s ease-out forwards;
+}
+
+@keyframes heartFloat {
+    0% {
+        opacity: 0;
+        transform:
+            translateY(0)
+            scale(.5);
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translateY(-180px)
+            translateX(var(--move))
+            scale(1.4);
+    }
+}
+
+/* =========================
+   防止手机选择文字
+========================= */
+
+.noSelect {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* 小屏幕 */
+
+@media (max-height: 650px) {
+
+    .wish {
+        top: 6%;
+    }
+
+    .wishText {
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .girl {
+        bottom: 8%;
+        transform: translateX(-50%) scale(.8);
+    }
+
+    .girl.show {
+        transform: translateX(-50%) scale(.8);
+    }
+
+    .cake {
+        bottom: 14%;
+        transform:
+            translateX(-50%)
+            scale(.7);
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="game" class="noSelect">
+
+    <!-- ======================
+         第一幕
+    ======================= -->
+
+    <section id="scene1">
+
+        <div class="introText">
+
+            点击空白处进入深处
+
+            <span class="subText">
+                TAP ANYWHERE
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================
+         第二幕
+    ======================= -->
+
+    <section id="scene2">
+
+        <div class="moon"></div>
+
+        <!-- 星星 -->
+        <div class="star" style="left:12%;top:18%;"></div>
+        <div class="star" style="left:27%;top:10%;"></div>
+        <div class="star" style="left:44%;top:20%;"></div>
+        <div class="star" style="left:67%;top:14%;"></div>
+        <div class="star" style="left:82%;top:27%;"></div>
+        <div class="star" style="left:55%;top:34%;"></div>
+        <div class="star" style="left:20%;top:37%;"></div>
+        <div class="star" style="left:75%;top:43%;"></div>
+        <div class="star" style="left:38%;top:30%;"></div>
+
+        <div class="ground"></div>
+
+
+        <!-- 火柴人1 -->
+        <div class="stickman s1">
+
+            <div class="head">
+                <div class="fire"></div>
+            </div>
+
+            <div class="body"></div>
+
+            <div class="arm left"></div>
+            <div class="arm right"></div>
+
+            <div class="leg left"></div>
+            <div class="leg right"></div>
+
+        </div>
+
+
+        <!-- 火柴人2 -->
+        <div class="stickman s2">
+
+            <div class="head">
+                <div class="fire"></div>
+            </div>
+
+            <div class="body"></div>
+
+            <div class="arm left"></div>
+            <div class="arm right"></div>
+
+            <div class="leg left"></div>
+            <div class="leg right"></div>
+
+        </div>
+
+
+        <!-- 火柴人3 -->
+        <div class="stickman s3">
+
+            <div class="head">
+                <div class="fire"></div>
+            </div>
+
+            <div class="body"></div>
+
+            <div class="arm left"></div>
+            <div class="arm right"></div>
+
+            <div class="leg left"></div>
+            <div class="leg right"></div>
+
+        </div>
+
+
+        <!-- 火柴人4 -->
+        <div class="stickman s4">
+
+            <div class="head">
+                <div class="fire"></div>
+            </div>
+
+            <div class="body"></div>
+
+            <div class="arm left"></div>
+            <div class="arm right"></div>
+
+            <div class="leg left"></div>
+            <div class="leg right"></div>
+
+        </div>
+
+
+        <!-- 蛋糕 -->
+        <div class="cake" id="cake">
+
+            <div class="plate"></div>
+
+            <div class="cakeBody">
+
+                <div class="cream"></div>
+
+                <div class="candle c1">
+                    <div class="candleFire"></div>
+                </div>
+
+                <div class="candle c2">
+                    <div class="candleFire"></div>
+                </div>
+
+                <div class="candle c3">
+                    <div class="candleFire"></div>
+                </div>
+
+                <div class="candle c4">
+                    <div class="candleFire"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================
+         第三幕：女孩许愿
+    ======================= -->
+
+    <section id="scene3">
+
+        <div class="wish">
+
+            <div class="wishTitle">
+                小女孩闭上眼睛，许下愿望
+            </div>
+
+            <div class="wishText">
+希望徐佳申哥哥天天开心，
+希望徐佳申哥哥以及他的家人无病无灾，长命百岁。
+祝愿他往后飞黄腾达，平步青云。
+            </div>
+
+        </div>
+
+
+        <!-- 女孩 -->
+        <div class="girl" id="girl">
+
+            <div class="hair"></div>
+
+            <div class="face">
+
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+
+                <div class="mouth"></div>
+
+            </div>
+
+            <div class="girlBody"></div>
+
+            <div class="girlArm left"></div>
+            <div class="girlArm right"></div>
+
+        </div>
+
+
+        <div class="blowHint" id="blowHint">
+            点击屏幕 · 吹灭蜡烛
+        </div>
+
+    </section>
+
+
+    <!-- ======================
+         最终画面
+    ======================= -->
+
+    <section id="ending">
+
+        <div class="endTitle">
+            愿你所愿皆如愿
+        </div>
+
+        <div class="endText">
+            愿徐佳申哥哥天天开心<br>
+            愿你和家人无病无灾，长命百岁<br>
+            愿往后的日子里<br>
+            飞黄腾达，平步青云<br>
+            前程似锦，万事胜意
+        </div>
+
+        <div class="signature">
+            这一份祝愿，送给特别的你
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   小希 · 深处的祝愿
+   JavaScript
+===================================================== */
+
+const scene1 = document.getElementById("scene1");
+const scene2 = document.getElementById("scene2");
+const scene3 = document.getElementById("scene3");
+const ending = document.getElementById("ending");
+
+const cake = document.getElementById("cake");
+const girl = document.getElementById("girl");
+
+const wish = document.querySelector(".wish");
+const blowHint = document.getElementById("blowHint");
+
+let currentScene = 1;
+let finished = false;
+
+
+/* =====================================================
+   第一幕 → 第二幕
+===================================================== */
+
+scene1.addEventListener("click", function () {
+
+    if (currentScene !== 1) return;
+
+    currentScene = 2;
+
+    scene1.classList.add("hide");
+
+    setTimeout(() => {
+
+        scene2.classList.add("show");
+
+        startRunning();
+
+    }, 900);
+
+});
+
+
+/* =====================================================
+   火柴人开始奔跑
+===================================================== */
+
+function startRunning() {
+
+    const people =
+        document.querySelectorAll(".stickman");
+
+    people.forEach((person, index) => {
+
+        setTimeout(() => {
+
+            person.classList.add("run");
+
+        }, index * 450);
+
+    });
+
+
+    /*
+       火柴人出现之后
+       蛋糕慢慢出现
+    */
+
+    setTimeout(() => {
+
+        cake.classList.add("show");
+
+    }, 2300);
+
+
+    /*
+       第二幕结束
+    */
+
+    setTimeout(() => {
+
+        goToWishScene();
+
+    }, 6500);
+
+}
+
+
+/* =====================================================
+   第二幕 → 第三幕
+===================================================== */
+
+function goToWishScene() {
+
+    if (currentScene !== 2) return;
+
+    currentScene = 3;
+
+    scene2.style.opacity = "0";
+
+    setTimeout(() => {
+
+        scene2.classList.remove("show");
+
+        scene3.classList.add("show");
+
+        setTimeout(() => {
+
+            girl.classList.add("show");
+
+        }, 300);
+
+        setTimeout(() => {
+
+            wish.classList.add("show");
+
+        }, 900);
+
+        setTimeout(() => {
+
+            blowHint.classList.add("show");
+
+        }, 3000);
+
+    }, 1000);
+
+}
+
+
+/* =====================================================
+   第三幕点击
+===================================================== */
+
+scene3.addEventListener("click", function () {
+
+    if (currentScene !== 3) return;
+
+    blowOutCandles();
+
+});
+
+
+/* =====================================================
+   吹灭蜡烛
+===================================================== */
+
+function blowOutCandles() {
+
+    currentScene = 4;
+
+    blowHint.style.opacity = "0";
+
+    /*
+       所有火焰熄灭
+    */
+
+    const flames =
+        document.querySelectorAll(".candleFire");
+
+    flames.forEach((flame, index) => {
+
+        setTimeout(() => {
+
+            flame.classList.add("off");
+
+        }, index * 100);
+
+    });
+
+
+    /*
+       女孩吹气动作
+    */
+
+    girl.style.transform =
+        "translateX(-50%) translateY(0) scale(1.02)";
+
+
+    /*
+       创建星光
+    */
+
+    setTimeout(() => {
+
+        createParticles();
+
+    }, 500);
+
+
+    /*
+       爱心
+    */
+
+    setTimeout(() => {
+
+        createHearts();
+
+    }, 800);
+
+
+    /*
+       进入最终画面
+    */
+
+    setTimeout(() => {
+
+        scene3.style.opacity = "0";
+
+        setTimeout(() => {
+
+            ending.classList.add("show");
+
+        }, 1000);
+
+    }, 3000);
+
+}
+
+
+/* =====================================================
+   星光粒子
+===================================================== */
+
+function createParticles() {
+
+    for (let i = 0; i < 45; i++) {
+
+        const p =
+            document.createElement("div");
+
+        p.className = "particle";
+
+        const x =
+            Math.random() * window.innerWidth;
+
+        const y =
+            window.innerHeight *
+            (.3 + Math.random() * .45);
+
+        const moveX =
+            (Math.random() - .5) * 220;
+
+        const moveY =
+            -(Math.random() * 220 + 80);
+
+        p.style.left = x + "px";
+        p.style.top = y + "px";
+
+        p.style.setProperty(
+            "--x",
+            moveX + "px"
+        );
+
+        p.style.setProperty(
+            "--y",
+            moveY + "px"
+        );
+
+        p.style.animationDelay =
+            Math.random() * .8 + "s";
+
+        document.getElementById("game")
+            .appendChild(p);
+
+        setTimeout(() => {
+
+            p.remove();
+
+        }, 3500);
+
+    }
+
+}
+
+
+/* =====================================================
+   爱心粒子
+===================================================== */
+
+function createHearts() {
+
+    for (let i = 0; i < 15; i++) {
+
+        const heart =
+            document.createElement("div");
+
+        heart.className = "heart";
+
+        heart.innerHTML =
+            Math.random() > .5
+            ? "♥"
+            : "♡";
+
+        heart.style.left =
+            (20 + Math.random() * 60) + "%";
+
+        heart.style.bottom =
+            (20 + Math.random() * 35) + "%";
+
+        heart.style.setProperty(
+            "--move",
+            ((Math.random() - .5) * 150) + "px"
+        );
+
+        heart.style.animationDelay =
+            Math.random() * 1 + "s";
+
+        document.getElementById("game")
+            .appendChild(heart);
+
+        setTimeout(() => {
+
+            heart.remove();
+
+        }, 4000);
+
+    }
+
+}
+
+
+/* =====================================================
+   防止手机浏览器长按菜单
+===================================================== */
+
+document.addEventListener(
+    "contextmenu",
+    function(e) {
+
+        e.preventDefault();
+
+    }
+);
+
+
+/* =====================================================
+   防止双击缩放
+===================================================== */
+
+let lastTouchEnd = 0;
+
+document.addEventListener(
+    "touchend",
+    function(event) {
+
+        const now =
+            Date.now();
+
+        if (
+            now - lastTouchEnd <= 300
+        ) {
+
+            event.preventDefault();
+
+        }
+
+        lastTouchEnd = now;
+
+    },
+    false
+);
+
+
+/* =====================================================
+   页面加载完成
+===================================================== */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        console.log(
+            "小希 · 深处的祝愿 已加载"
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>
